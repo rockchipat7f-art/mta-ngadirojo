@@ -3,28 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Peta GPS Real-Time</title>
+    <title>Peta Komunitas Real-Time</title>
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     
-    <style>
-        body { margin: 0; padding: 0; font-family: Arial, sans-serif; }
-        #map { height: 100vh; width: 100%; }
-        
-        /* Kotak informasi di atas peta */
-        .info-panel { 
-            position: absolute; 
-            top: 10px; 
-            left: 50%; 
-            transform: translateX(-50%);
-            background: rgba(255, 255, 255, 0.9); 
-            padding: 10px 20px; 
-            border-radius: 8px; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-            z-index: 1000; /* Agar tampil di atas peta */
-            text-align: center;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
@@ -34,65 +17,7 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
-    <script>
-        // 1. Inisialisasi peta (titik awal bebas, nanti otomatis bergeser ke GPS)
-        var map = L.map('map').setView([-7.8159, 110.9256], 13);
-
-        // 2. Tambahkan layer peta OpenStreetMap
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; OpenStreetMap'
-        }).addTo(map);
-
-        var marker, circle;
-        var statusText = document.getElementById('status');
-
-        // 3. Konfigurasi akurasi GPS
-        var gpsOptions = {
-            enableHighAccuracy: true, // Memaksa penggunaan GPS asli (bukan cuma dari sinyal internet)
-            timeout: 10000,           // Waktu tunggu maksimal 10 detik
-            maximumAge: 0             // Jangan gunakan data lokasi lama/cache
-        };
-
-        // 4. Fungsi jika lokasi berhasil ditemukan
-        function onLocationFound(position) {
-            var lat = position.coords.latitude;
-            var lng = position.coords.longitude;
-            var accuracy = position.coords.accuracy; // Akurasi dalam satuan meter
-
-            statusText.innerHTML = "Lokasi akurat ditemukan! (Akurasi: " + Math.round(accuracy) + " meter)";
-
-            // Hapus marker lama jika koordinat berubah (agar tidak menumpuk)
-            if (marker) {
-                map.removeLayer(marker);
-                map.removeLayer(circle);
-            }
-
-            // Tambahkan marker di lokasi baru
-            marker = L.marker([lat, lng]).addTo(map);
-            
-            // Tambahkan lingkaran untuk visualisasi jangkauan akurasi
-            circle = L.circle([lat, lng], { radius: accuracy, color: 'blue', fillOpacity: 0.2 }).addTo(map);
-
-            // Geser kamera peta ke lokasi pengguna
-            map.setView([lat, lng], 17);
-        }
-
-        // 5. Fungsi jika gagal mendapat lokasi (ditolak user atau sinyal jelek)
-        function onLocationError(err) {
-            console.warn(`ERROR(${err.code}): ${err.message}`);
-            statusText.innerHTML = "Gagal mengakses GPS. Pastikan izin lokasi aktif.";
-            statusText.style.color = "red";
-        }
-
-        // 6. Jalankan pemantauan (Watch) GPS Real-Time
-        if (!navigator.geolocation) {
-            statusText.innerHTML = "Browser kamu tidak mendukung fitur GPS.";
-        } else {
-            // watchPosition akan terus memantau pergerakan secara real-time
-            navigator.geolocation.watchPosition(onLocationFound, onLocationError, gpsOptions);
-        }
-    </script>
+    <script src="script.js"></script>
 
 </body>
 </html>
