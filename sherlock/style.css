@@ -1,0 +1,8 @@
+/* Mengatur margin dasar agar tidak ada ruang kosong di pinggir layar */
+body { margin: 0; padding: 0; font-family: Arial, sans-serif; }
+
+/* Mengatur ukuran peta agar memenuhi layar (100% viewport height) */
+#map { height: 100vh; width: 100%; }
+
+/* Mengatur kotak informasi GPS di atas peta */
+.info-panel { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); background: rgba(255, 255, 255, 0.9); padding: 10px 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.3); z-index: 1000; text-align: center; }
