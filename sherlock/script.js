@@ -2,7 +2,7 @@
 var map = L.map('map', {
     doubleTapDragZoom: true, // Mengaktifkan fitur zoom satu jari
     doubleTapDragZoomOptions: {
-        reverse: false // 'false' berarti geser bawah untuk zoom in, geser atas untuk zoom out (standar map)
+        reverse: true // 'true' berarti geser bawah untuk zoom out, geser atas untuk zoom in (standar map)
     }
 }).setView([-7.8159, 110.9256], 13);
 
