@@ -22,19 +22,20 @@
       z-index: 5; text-align: center; font-weight: bold;
     }
 
-    /* REVISI CSS TOMBOL LOGOUT POJOK KANAN ATAS */
+    /* REVISI CSS TOMBOL LOGOUT */
     .btn-logout-map {
       position: absolute; 
       top: 15px; 
-      right: 15px; /* Pindah ke pojok kanan */
+      right: 15px; 
       padding: 8px 14px; 
-      font-size: 22px; /* Ukuran emoji dibesarkan sedikit */
+      font-size: 20px; 
       background: #c0392b; 
       color: white;
       border: 2px solid #f1c40f; 
       border-radius: 8px; 
       cursor: pointer;
-      z-index: 1000; /* Z-index tinggi agar bisa diklik di atas map */
+      /* Z-index diturunkan jadi 5 agar berada DI BAWAH gerbang, tapi DI ATAS peta */
+      z-index: 5; 
       box-shadow: 0 0 15px rgba(0,0,0,0.5); 
       transition: all 0.3s ease;
       display: flex;
@@ -115,7 +116,7 @@
   <div class="info-panel" id="status">Mencari lokasi GPS...</div>
   <div id="map"></div>
   
-  <button type="button" class="btn-logout-map" id="btnTutup" title="Tutup Gerbang">⏻</button>
+  <button type="button" class="btn-logout-map" id="btnTutup" title="Tutup Gerbang">🔒</button>
 
   <div id="loginLayer" class="layer-login">
     <div class="form-login" id="ignnql">
@@ -151,10 +152,9 @@
       var map = L.map('map', {
           doubleTapDragZoom: true, 
           doubleTapDragZoomOptions: { reverse: true },
-          zoomControl: false // Menyembunyikan tombol zoom bawaan supaya gak nabrak
+          zoomControl: false 
       }).setView([-7.8159, 110.9256], 13);
 
-      // Kembalikan tombol zoom bawaan Leaflet dan taruh di posisi yang aman (misal kiri bawah)
       L.control.zoom({ position: 'bottomleft' }).addTo(map);
 
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
