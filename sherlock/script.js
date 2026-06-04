@@ -1,5 +1,10 @@
-// 1. Inisialisasi peta 
-var map = L.map('map').setView([-7.8159, 110.9256], 13);
+// 1. Inisialisasi peta dengan tambahan fitur Double Tap Drag Zoom
+var map = L.map('map', {
+    doubleTapDragZoom: true, // Mengaktifkan fitur zoom satu jari
+    doubleTapDragZoomOptions: {
+        reverse: false // 'false' berarti geser bawah untuk zoom in, geser atas untuk zoom out (standar map)
+    }
+}).setView([-7.8159, 110.9256], 13);
 
 // 2. Tambahkan layer peta OpenStreetMap
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
