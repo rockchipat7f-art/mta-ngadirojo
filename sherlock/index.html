@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Situs Peta Lokasi</title>
+    
+    <!-- Memanggil CSS dari Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <style>
+        /* Mengatur ukuran peta di halaman web */
+        body { margin: 0; padding: 0; font-family: Arial, sans-serif; }
+        #map { height: 100vh; width: 100%; } /* 100vh membuat peta memenuhi layar */
+        
+        .header { padding: 15px; background: #333; color: white; text-align: center; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h2>Sistem Pemantauan Lokasi</h2>
+    </div>
+
+    <!-- Area di mana peta akan ditampilkan -->
+    <div id="map"></div>
+
+    <!-- Memanggil JavaScript dari Leaflet -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <script>
+        // 1. Inisialisasi peta dan atur titik tengah (Latitude, Longitude) serta level zoom
+        // Angka di bawah adalah contoh koordinat sekitar Wonogiri
+        var map = L.map('map').setView([-7.8159, 110.9256], 13);
+
+        // 2. Tambahkan layer visual peta dari OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+
+        // 3. Tambahkan Marker (Pin penanda lokasi)
+        var marker = L.marker([-7.8159, 110.9256]).addTo(map);
+
+        // 4. Tambahkan pop-up teks saat marker diklik
+        marker.bindPopup("<b>Titik Lokasi Utama</b><br>Koordinat terpantau di sini.").openPopup();
+    </script>
+
+</body>
+</html>
