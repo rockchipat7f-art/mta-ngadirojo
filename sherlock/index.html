@@ -2,315 +2,230 @@
 <html lang="id">
 
 <head>
-  <title>Login Gerbang Asia</title>
+  <title>Gerbang Peta Komunitas</title>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body, html { width: 100%; height: 100%; overflow: hidden; font-family: 'Segoe UI', sans-serif; background-color: #111; }
+
+    /* ================= CSS PETA ================= */
+    #map { position: absolute; top: 0; left: 0; height: 100vh; width: 100%; z-index: 1; }
+    
+    .info-panel { 
+      position: absolute; top: 15px; left: 50%; transform: translateX(-50%);
+      background: rgba(255, 255, 255, 0.9); padding: 10px 20px; 
+      border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+      z-index: 5; text-align: center; font-weight: bold;
     }
 
-    body, html {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #111;
+    .btn-logout-map {
+      position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+      padding: 12px 30px; background: #c0392b; color: white;
+      border: 2px solid #f1c40f; border-radius: 8px; font-weight: bold; cursor: pointer;
+      z-index: 5; box-shadow: 0 0 15px rgba(0,0,0,0.5); transition: all 0.3s ease;
     }
+    .btn-logout-map:hover { background: #f1c40f; color: #111; }
 
-    .konten-utama {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: radial-gradient(circle, #2c3e50, #0f171e);
-      z-index: 1;
-    }
-
-    .box-konten {
-      text-align: center;
-      color: #fff;
-    }
-
-    .box-konten h1 {
-      font-size: 3.5rem;
-      color: #f1c40f;
-      margin-bottom: 10px;
-    }
-
+    /* ================= CSS LOGIN & GERBANG ================= */
     .layer-login {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 20;
-      transition: opacity 0.8s ease, visibility 0.8s;
-      background: rgba(0, 0, 0, 0.4);
+      position: absolute; width: 100%; height: 100%;
+      display: flex; justify-content: center; align-items: center;
+      z-index: 20; transition: opacity 0.8s ease, visibility 0.8s; background: rgba(0, 0, 0, 0.6);
     }
-
-    .layer-login.hilang {
-      opacity: 0;
-      visibility: hidden;
-    }
+    .layer-login.hilang { opacity: 0; visibility: hidden; }
 
     .form-login {
-      background: #1e272c;
-      padding: 40px;
-      border-radius: 8px;
-      border: 3px solid #f1c40f;
-      box-shadow: 0 0 25px rgba(0, 0, 0, 0.7);
-      width: 350px;
-      text-align: center;
+      background: #1e272c; padding: 40px; border-radius: 8px;
+      border: 3px solid #f1c40f; box-shadow: 0 0 25px rgba(0, 0, 0, 0.7);
+      width: 350px; text-align: center; transition: transform 0.1s;
     }
+    .form-login h2 { color: #f1c40f; margin-bottom: 25px; letter-spacing: 2px; }
 
-    .form-login h2 {
-      color: #f1c40f;
-      margin-bottom: 25px;
-      letter-spacing: 2px;
-    }
-
-    /* TAMBAHAN CSS UNTUK INPUT LOGIN */
     .form-login input {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 15px;
-      background: #111;
-      border: 1px solid #34495e;
-      color: #fff;
-      border-radius: 4px;
-      outline: none;
-      font-size: 16px;
-      transition: border-color 0.3s;
+      width: 100%; padding: 12px; margin-bottom: 15px; background: #111;
+      border: 1px solid #34495e; color: #fff; border-radius: 4px; outline: none; font-size: 16px;
     }
+    .form-login input:focus { border-color: #f1c40f; }
 
-    .form-login input:focus {
-      border-color: #f1c40f;
-    }
-
-    .pesan-error {
-      color: #e74c3c;
-      font-size: 14px;
-      margin-bottom: 15px;
-      display: none; /* Disembunyikan secara default */
-    }
+    .pesan-error { color: #e74c3c; font-size: 14px; margin-bottom: 15px; display: none; }
 
     .form-login button {
-      width: 100%;
-      padding: 12px;
-      background: #c0392b;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.3s;
+      width: 100%; padding: 12px; background: #c0392b; color: white;
+      border: none; border-radius: 4px; font-weight: bold; cursor: pointer; transition: background 0.3s;
     }
-
-    .form-login button:hover {
-      background: #962d22;
-    }
+    .form-login button:hover { background: #962d22; }
 
     .screen-gerbang {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      z-index: 10;
-      pointer-events: none;
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      display: flex; z-index: 10; pointer-events: none;
     }
 
     .sisi-gerbang {
-      position: relative;
-      width: 50%;
-      height: 100%;
-      background-color: #4a0e17;
+      position: relative; width: 50%; height: 100%; background-color: #4a0e17;
       transition: transform 1.8s cubic-bezier(0.77, 0, 0.175, 1);
-      display: flex;
-      align-items: flex-end;
-      pointer-events: auto;
+      display: flex; align-items: flex-end; pointer-events: auto;
     }
 
-    .gerbang-kiri {
-      transform-origin: left center;
-      border-right: 4px solid #f1c40f;
-      justify-content: flex-end;
-    }
-
-    .gerbang-kanan {
-      transform-origin: right center;
-      border-left: 4px solid #f1c40f;
-      justify-content: flex-start;
-    }
+    .gerbang-kiri { transform-origin: left center; border-right: 4px solid #f1c40f; justify-content: flex-end; }
+    .gerbang-kanan { transform-origin: right center; border-left: 4px solid #f1c40f; justify-content: flex-start; }
 
     .pilar {
-      position: absolute;
-      bottom: 0;
-      width: 50px;
-      height: 85%;
+      position: absolute; bottom: 0; width: 50px; height: 85%;
       background: linear-gradient(to right, #962d22, #c0392b, #7f261e);
     }
-
-    .gerbang-kiri .pilar {
-      left: 10%;
-    }
-
-    .gerbang-kanan .pilar {
-      right: 10%;
-    }
+    .gerbang-kiri .pilar { left: 10%; }
+    .gerbang-kanan .pilar { right: 10%; }
 
     .daun-pintu {
-      width: 100%;
-      height: 75%;
-      background: #78131e;
-      border: 15px solid #5c0f17;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      width: 100%; height: 75%; background: #78131e; border: 15px solid #5c0f17;
+      display: flex; justify-content: center; align-items: center;
     }
-
     .ornamen-kotak {
-      width: 70%;
-      height: 80%;
-      border: 4px solid #f1c40f;
+      width: 70%; height: 80%; border: 4px solid #f1c40f;
       background-image: linear-gradient(rgba(241, 196, 15, 0.3) 2px, transparent 2px), linear-gradient(90deg, rgba(241, 196, 15, 0.3) 2px, transparent 2px);
       background-size: 40px 40px;
     }
+    .atap-kiri { right: 0; border-radius: 100px 0 0 0; }
+    .atap-kanan { left: 0; border-radius: 0 100px 0 0; }
 
-    .atap-kiri {
-      right: 0;
-      border-radius: 100px 0 0 0;
-    }
-
-    .atap-kanan {
-      left: 0;
-      border-radius: 0 100px 0 0;
-    }
-
-    .screen-gerbang.terbuka .gerbang-kiri {
-      transform: translateX(-100%);
-    }
-
-    .screen-gerbang.terbuka .gerbang-kanan {
-      transform: translateX(100%);
-    }
-
-    .btn-logout {
-      margin-top: 20px;
-      padding: 10px 25px;
-      background: #2c3e50;
-      color: #f1c40f;
-      border: 2px solid #f1c40f;
-      border-radius: 4px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .btn-logout:hover {
-      background: #f1c40f;
-      color: #111;
-      box-shadow: 0 0 15px rgba(241, 196, 15, 0.4);
-    }
+    .screen-gerbang.terbuka .gerbang-kiri { transform: translateX(-100%); }
+    .screen-gerbang.terbuka .gerbang-kanan { transform: translateX(100%); }
   </style>
 </head>
 
 <body>
-  <div class="konten-utama" id="irowkz">
-    <div class="box-konten" id="ix1cun">
-      <h1 id="iruwil">Selamat Datang</h1>
-      <p id="ione7j">Anda berhasil masuk ke dalam kuil rahasia.</p>
-      <button type="button" class="btn-logout" id="btnTutup">Logout</button>
-    </div>
-  </div>
-  
+
+  <div class="info-panel" id="status">Mencari lokasi GPS...</div>
+  <div id="map"></div>
+  <button type="button" class="btn-logout-map" id="btnTutup">Tutup Gerbang</button>
+
   <div id="loginLayer" class="layer-login">
     <div class="form-login" id="ignnql">
-      <h2 id="iewst5">Masuk Kuil</h2>
-      
+      <h2>Sistem Pemantauan</h2>
       <input type="text" id="inputUser" placeholder="Username" autocomplete="off" />
       <input type="password" id="inputPass" placeholder="Password" />
       <p id="pesanError" class="pesan-error">Kredensial salah, gerbang terkunci!</p>
-      
       <button type="button" id="btnBuka">Buka Gerbang</button>
     </div>
   </div>
   
   <div id="gerbangUtama" class="screen-gerbang">
-    <div class="sisi-gerbang gerbang-kiri" id="ii0adi">
-      <div class="atap-kiri" id="irm1dj"></div>
-      <div class="pilar" id="il90mv"></div>
-      <div class="daun-pintu" id="i0ar7a">
-        <div class="ornamen-kotak" id="igulsb"></div>
-      </div>
+    <div class="sisi-gerbang gerbang-kiri">
+      <div class="atap-kiri"></div>
+      <div class="pilar"></div>
+      <div class="daun-pintu"><div class="ornamen-kotak"></div></div>
     </div>
-    <div class="sisi-gerbang gerbang-kanan" id="i2nj93">
-      <div class="atap-kanan" id="i5j0ot"></div>
-      <div class="pilar" id="i152yh"></div>
-      <div class="daun-pintu" id="ie8uu1">
-        <div class="ornamen-kotak" id="i7r428"></div>
-      </div>
+    <div class="sisi-gerbang gerbang-kanan">
+      <div class="atap-kanan"></div>
+      <div class="pilar"></div>
+      <div class="daun-pintu"><div class="ornamen-kotak"></div></div>
     </div>
   </div>
   
-<script>
-    // Memastikan elemen sudah dirender sebelum script berjalan
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-doubletapdrag"></script>
+  <script src="https://unpkg.com/leaflet-doubletapdragzoom"></script>
+
+  <script>
     document.addEventListener("DOMContentLoaded", function() {
       
+      // INISIALISASI PETA
+      var map = L.map('map', {
+          doubleTapDragZoom: true, 
+          doubleTapDragZoomOptions: { reverse: true }
+      }).setView([-7.8159, 110.9256], 13);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+          attribution: '&copy; OpenStreetMap'
+      }).addTo(map);
+
+      var marker, circle;
+      var statusText = document.getElementById('status');
+      var isFirstZoom = true; 
+      var gpsOptions = { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 };
+
+      function onLocationFound(position) {
+          var lat = position.coords.latitude;
+          var lng = position.coords.longitude;
+          var accuracy = position.coords.accuracy;
+          statusText.innerHTML = "GPS Aktif (Akurasi: " + Math.round(accuracy) + " m)";
+
+          if (!marker) {
+              marker = L.marker([lat, lng]).addTo(map);
+              circle = L.circle([lat, lng], { radius: accuracy, color: 'blue', fillOpacity: 0.2 }).addTo(map);
+          } else {
+              marker.setLatLng([lat, lng]);
+              circle.setLatLng([lat, lng]);
+              circle.setRadius(accuracy);
+          }
+
+          if (isFirstZoom) {
+              map.setView([lat, lng], 17);
+              isFirstZoom = false;         
+          }
+      }
+
+      function onLocationError(err) {
+          statusText.innerHTML = "Gagal mengakses GPS.";
+          statusText.style.color = "red";
+      }
+
+      if (navigator.geolocation) {
+          navigator.geolocation.watchPosition(onLocationFound, onLocationError, gpsOptions);
+      }
+
+      // INISIALISASI LOGIN
       const btnBuka = document.getElementById('btnBuka');
       const btnTutup = document.getElementById('btnTutup');
       const loginLayer = document.getElementById('loginLayer');
       const gerbangUtama = document.getElementById('gerbangUtama');
-      
-      // Mengambil elemen input
       const inputUser = document.getElementById('inputUser');
       const inputPass = document.getElementById('inputPass');
       const pesanError = document.getElementById('pesanError');
+      const formLogin = document.getElementById('ignnql');
 
-      // 1. Event Listener: BUKA GERBANG dengan Logika
-      btnBuka.addEventListener('click', function() {
-        
-        // .trim() menghapus spasi ekstra di awal/akhir
-        // .toLowerCase() memaksa huruf menjadi kecil semua
+      // Fungsi Eksekusi Login
+      function prosesLogin() {
         const username = inputUser.value.trim().toLowerCase();
         const password = inputPass.value.trim();
 
-        // Cek kecocokan
         if (username === "admin" && password === "rahasia") {
-          
-          pesanError.style.display = "none"; // Hilangkan pesan error jika benar
+          pesanError.style.display = "none";
           loginLayer.classList.add('hilang');
           
           setTimeout(() => {
             gerbangUtama.classList.add('terbuka');
+            // Refresh ukuran peta agar tidak nge-glitch setelah gerbang terbuka
+            setTimeout(() => { map.invalidateSize(); }, 1800); 
           }, 300);
-          
         } else {
-          // Tampilkan pesan error jika salah
           pesanError.style.display = "block";
-          
-          // Efek getar kecil pada box login
-          const formLogin = document.getElementById('ignnql');
           formLogin.style.transform = "translate(5px, 0)";
           setTimeout(() => { formLogin.style.transform = "translate(-5px, 0)"; }, 100);
           setTimeout(() => { formLogin.style.transform = "translate(5px, 0)"; }, 200);
           setTimeout(() => { formLogin.style.transform = "translate(0, 0)"; }, 300);
         }
+      }
+
+      // 1. Login pakai Klik Tombol
+      btnBuka.addEventListener('click', prosesLogin);
+
+      // 2. Login pakai tombol ENTER di keyboard
+      inputUser.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') { e.preventDefault(); prosesLogin(); }
+      });
+      inputPass.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') { e.preventDefault(); prosesLogin(); }
       });
 
-      // 2. Event Listener: TUTUP GERBANG (LOGOUT)
+      // 3. Logout (Tutup Gerbang)
       btnTutup.addEventListener('click', function() {
         gerbangUtama.classList.remove('terbuka'); 
-        
-        // Bersihkan kolom input saat logout
         inputUser.value = "";
         inputPass.value = "";
         pesanError.style.display = "none";
@@ -322,3 +237,5 @@
 
     });
   </script>
+</body>
+</html>
