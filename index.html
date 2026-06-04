@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MTA Ngadirojo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        nav {
+            background-color: #34495e;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+        }
+        
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        nav a:hover {
+            background-color: #2c3e50;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        main {
+            padding: 3rem 0;
+        }
+        
+        .section {
+            margin-bottom: 3rem;
+        }
+        
+        .section h2 {
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+        
+        .card {
+            background-color: #ecf0f1;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card h3 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+        
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        
+        footer p {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>MTA Ngadirojo</h1>
+        <p>Selamat datang di website kami</p>
+    </header>
+    
+    <nav>
+        <ul>
+            <li><a href="#beranda">Beranda</a></li>
+            <li><a href="#tentang">Tentang Kami</a></li>
+            <li><a href="#layanan">Layanan</a></li>
+            <li><a href="#kontak">Kontak</a></li>
+        </ul>
+    </nav>
+    
+    <main class="container">
+        <section class="section" id="beranda">
+            <h2>Beranda</h2>
+            <div class="card">
+                <h3>Selamat Datang</h3>
+                <p>Ini adalah halaman utama website MTA Ngadirojo. Anda dapat menambahkan konten sesuai kebutuhan Anda.</p>
+            </div>
+        </section>
+        
+        <section class="section" id="tentang">
+            <h2>Tentang Kami</h2>
+            <div class="card">
+                <h3>Informasi Perusahaan</h3>
+                <p>Berikan informasi lengkap tentang MTA Ngadirojo, visi, misi, dan sejarah perusahaan di sini.</p>
+            </div>
+        </section>
+        
+        <section class="section" id="layanan">
+            <h2>Layanan</h2>
+            <div class="card">
+                <h3>Layanan Kami</h3>
+                <p>Jelaskan berbagai layanan yang ditawarkan oleh MTA Ngadirojo dengan detail dan spesifikasi yang jelas.</p>
+            </div>
+        </section>
+        
+        <section class="section" id="kontak">
+            <h2>Kontak</h2>
+            <div class="card">
+                <h3>Hubungi Kami</h3>
+                <p>Email: info@mta-ngadirojo.com</p>
+                <p>Telepon: +62 XXX XXXX XXXX</p>
+                <p>Alamat: Ngadirojo, Indonesia</p>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2026 MTA Ngadirojo. Semua hak dilindungi.</p>
+    </footer>
+</body>
+</html>
