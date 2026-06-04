@@ -261,7 +261,8 @@
     </div>
   </div>
   
-  <script>
+<script>
+    // Memastikan elemen sudah dirender sebelum script berjalan
     document.addEventListener("DOMContentLoaded", function() {
       
       const btnBuka = document.getElementById('btnBuka');
@@ -269,17 +270,20 @@
       const loginLayer = document.getElementById('loginLayer');
       const gerbangUtama = document.getElementById('gerbangUtama');
       
-      // Mengambil elemen input baru
+      // Mengambil elemen input
       const inputUser = document.getElementById('inputUser');
       const inputPass = document.getElementById('inputPass');
       const pesanError = document.getElementById('pesanError');
 
       // 1. Event Listener: BUKA GERBANG dengan Logika
       btnBuka.addEventListener('click', function() {
-        const username = inputUser.value;
-        const password = inputPass.value;
+        
+        // .trim() menghapus spasi ekstra di awal/akhir
+        // .toLowerCase() memaksa huruf menjadi kecil semua
+        const username = inputUser.value.trim().toLowerCase();
+        const password = inputPass.value.trim();
 
-        // Cek kecocokan (bisa diganti sesuai kebutuhanmu)
+        // Cek kecocokan
         if (username === "admin" && password === "rahasia") {
           
           pesanError.style.display = "none"; // Hilangkan pesan error jika benar
@@ -293,7 +297,28 @@
           // Tampilkan pesan error jika salah
           pesanError.style.display = "block";
           
-          // Efek getar kecil (opsional) pada box login
+          // Efek getar kecil pada box login
           const formLogin = document.getElementById('ignnql');
           formLogin.style.transform = "translate(5px, 0)";
-          setTimeout(() => { formLogin.style.
+          setTimeout(() => { formLogin.style.transform = "translate(-5px, 0)"; }, 100);
+          setTimeout(() => { formLogin.style.transform = "translate(5px, 0)"; }, 200);
+          setTimeout(() => { formLogin.style.transform = "translate(0, 0)"; }, 300);
+        }
+      });
+
+      // 2. Event Listener: TUTUP GERBANG (LOGOUT)
+      btnTutup.addEventListener('click', function() {
+        gerbangUtama.classList.remove('terbuka'); 
+        
+        // Bersihkan kolom input saat logout
+        inputUser.value = "";
+        inputPass.value = "";
+        pesanError.style.display = "none";
+        
+        setTimeout(() => {
+          loginLayer.classList.remove('hilang'); 
+        }, 1500);
+      });
+
+    });
+  </script>
